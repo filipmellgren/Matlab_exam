@@ -30,18 +30,26 @@ beta = 1 / (theta*(1/kdivy) + (1 - delta)); % 0.9231
 % c)
 tauvec = (0.01:0.01:0.99)'; % 1% to 99% in steps of 1%
 xi = 0; % this is assumed in the exercise. I need it to define cbar inside the function.
-revenue2c = govrev(tauvec, w, c, xi, gamma, theta,r); % does not depend on alpha – correct?
+revenue2c = govrev(tauvec, w, c, xi, gamma, theta,r, alpha2b); 
 
 %% 3 Subsistence consumption
 % a
 i = 1;
-xi_vec = 0.1:0.01:0.9;
-alpha3a = alpha_xi(theta, h, kdivy, tau, xi_vec);
+xi_vec = 0.1:0.01:0.9; % all xi values we care about
+alpha3a = alpha_xi(theta, h, kdivy, tau, xi_vec); % Note that function accepts the vector value
 plot(xi_vec, alpha3a)
 
 % b)
-xi = 0.3;
+xi = 0.3; % New assumption
 alpha3b = alpha_xi(theta, h, kdivy, tau, xi);
-revenue3a = govrev(tauvec, w, c, xi, gamma, theta,r);
+revenue3a = govrev(tauvec, w, c, xi, gamma, theta,r, alpha3b);
 
 %% 4
+cbar = 0.2;
+params4 = [gamma, theta, delta, tau, cbar];
+
+alpharoot(2,h,params4)
+
+ % Need to create an anonymous func s.t. we can provide it to fsolve.
+fun = @(x) alpharoot(x, params4);
+fsolve(fun, 1); % 1 is just some intial guessing point
