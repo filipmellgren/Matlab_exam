@@ -13,6 +13,7 @@ tau = 0.3;
 cbar = 0;
 
 % Values I solved for
+%TODO functions files for these guys
 r = theta * 1/kdivy;
 w = (1-theta) * kdivy^(theta/(1-theta)); % must be wrong
 
@@ -22,17 +23,25 @@ v = tau*w*h;
 c = (1-tau)*w*h + r*k + v - k + (1-delta)*k; % true in steady state
 
 % alpha and beta
-alpha = ((1-tau)*w) / (h^(1/gamma)*(c - cbar)); % 13.34
+alpha2b = alpha(theta, h, kdivy, tau, c, k, cbar, gamma);
+%alpha = ((1-tau)*w) / (h^(1/gamma)*(c - cbar)); % 13.34
 beta = 1 / (theta*(1/kdivy) + (1 - delta)); % 0.9231
 
 % c)
 tauvec = (0.01:0.01:0.99)'; % 1% to 99% in steps of 1%
-% solve for optimal hours worked
-hvec = ((1-tauvec)*w/(c - cbar)).^(gamma); % optimal hours worked, given tau and the others
-% solve for new capital stock using f.o.c w.r.t capital
-kvec = (theta * (hvec.^(1-theta)) /r).^(1/(1-theta));
-% solve for new wage, simply marginal product of labour
-wvec = (1-theta)*(kvec./hvec).^theta; % constant
-% Government revenue:
-tauvec.*wvec.*hvec;
+xi = 0; % this is assumed in the exercise. I need it to define cbar inside the function.
+revenue2c = govrev(tauvec, w, c, xi, gamma, theta,r); % does not depend on alpha – correct?
 
+%% 3 Subsistence consumption
+% a
+i = 1;
+xi_vec = 0.1:0.01:0.9;
+alpha3a = alpha_xi(theta, h, kdivy, tau, xi_vec);
+plot(xi_vec, alpha3a)
+
+% b)
+xi = 0.3;
+alpha3b = alpha_xi(theta, h, kdivy, tau, xi);
+revenue3a = govrev(tauvec, w, c, xi, gamma, theta,r);
+
+%% 4
