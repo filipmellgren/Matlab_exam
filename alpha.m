@@ -4,6 +4,8 @@ function [alpha] = alpha(theta, h, kdivy, tau, c, cbar, gamma)
 
 r = theta * 1/kdivy;
 w = (1-theta) * kdivy^(theta/(1-theta));
+%c = k.^theta.*h.^(1-theta) - delta * k;
+
 
 alpha = ((1-tau)*w) ./ (h.^(1/gamma).*(c - cbar));
 

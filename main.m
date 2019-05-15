@@ -30,7 +30,7 @@ beta = 1 / (theta*(1/kdivy) + (1 - delta)); % 0.9231
 % c)
 tauvec = (0.01:0.01:0.99)'; % 1% to 99% in steps of 1%
 xi = 0; % this is assumed in the exercise. I need it to define cbar inside the function.
-revenue2c = govrev(tauvec, w, c, xi, gamma, theta,r, alpha2b); 
+revenue2c = govrev(tauvec, w, c, xi, gamma, theta,r, alpha2b, kdivy, delta); 
 
 %% 3 Subsistence consumption
 % a
@@ -39,27 +39,33 @@ alpha3a = alpha_xi(theta, h, kdivy, tau, xi_vec); % Note that function accepts t
 plot(xi_vec, alpha3a)
 xlabel('xi')
 ylabel('alpha')
-title('disutility of labour explodes with higher subsistence consumption')
+title('Disutility of labour explodes with higher subsistence consumption')
 
 % b)
 xi = 1/3; % New assumption
 alpha3b = alpha_xi(theta, h, kdivy, tau, xi);
-revenue3b = govrev(tauvec, w, c, xi, gamma, theta,r, alpha3b);
+revenue3b = govrev(tauvec, w, c, xi, gamma, theta,r, alpha3b,  kdivy, delta);
 
 %% 4
 cbar = 0.2;
 params4 = [gamma, theta, delta, cbar, beta];
- % Need to create an anonymous func s.t. we can provide it to fsolve.
+ % Need to create an anonymous func so that I can provide it to fsolve.
 fun = @(x) alpharoot(x, h, params4, tau);
-alpha4a = fsolve(fun, alpha2b);
+% part a
+alpha4a = fsolve(fun, alpha2b); % Gives me a calivrated alpha value
 
 fun2 = @(x) alpharoot(alpha4a, x, params4, tauvec);
 hguess = ones(length(tauvec),1);
+% Part b, solve for h given alpha:
 h4a = fsolve(fun2,hguess);
-
+% part c, calculate tax revenue using a function. 
 revenue4c = govrevroot(theta, h4a, r, tauvec);
 
 %% 5 comparative statics
 plot([revenue2c, revenue3b, revenue4c])
 legend('revenue2c','revenue3b', 'revenue4c')
+title('Laffer curves')
 
+% Revenue for 2c and 3b have visibly similar revenue maximising tax rates.
+% Check if they are the same
+max(revenue2c) - max(revenue3b)
