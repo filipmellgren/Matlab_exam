@@ -64,7 +64,9 @@ revenue4c = govrevroot(theta, h4a, r, tauvec);
 %% 5 comparative statics
 plot([revenue2c, revenue3b, revenue4c])
 legend('revenue2c','revenue3b', 'revenue4c')
-title('Laffer curves')
+title( {'Laffer curves';'These plots display steady state revenue for a given tax rate'})
+xlabel('Tax rate (percent of income)')
+ylabel('Government revenue')
 
 % Revenue for 2c and 3b have visibly similar revenue maximising tax rates.
 % Check if they are the same:
