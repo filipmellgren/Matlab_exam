@@ -67,5 +67,5 @@ legend('revenue2c','revenue3b', 'revenue4c')
 title('Laffer curves')
 
 % Revenue for 2c and 3b have visibly similar revenue maximising tax rates.
-% Check if they are the same
-max(revenue2c) - max(revenue3b)
+% Check if they are the same:
+max(revenue2c) - max(revenue3b); % Nope, difference of -0.042.
