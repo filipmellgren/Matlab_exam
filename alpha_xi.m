@@ -14,6 +14,6 @@ k = (theta * (h^(1-theta)/r))^(1/(1-theta));
 c = k*(kdivy^(theta - 1)-delta);
 cbar = c*xi;
 
-alphaxi = alpha(theta, h, kdivy, tau, c, k, cbar, gamma);
+alphaxi = alpha(theta, h, kdivy, tau, c,  cbar, gamma);
 end
 
