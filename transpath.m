@@ -79,4 +79,6 @@ title('Capital')
 % Plot the six above jointly. Then plot the following:
 
 plot(v)
-title('Tax revenue')
+title( {'Tax revenue';'Between the steady states, taxes increase, this plot shows evolution after T'})
+xlabel('Periods after T')
+ylabel('Revenue per wage unit earned in a time period')
