@@ -1,6 +1,7 @@
 function [alpha] = alpha(theta, h, kdivy, tau, c, cbar, gamma)
 %alpha for question 2
-%   takes the parameters and gives you alpha
+%   takes the parameters and gives you alpha, as derived under 2a in the
+%   pdf.
 
 w = (1-theta) * kdivy^(theta/(1-theta)); %marginal product of labour defines the wage
 

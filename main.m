@@ -20,18 +20,20 @@ k = h / ((1/kdivy)^(1/(1-theta))); % Eq. (12) in pdf
 v = tau*w*h; % the government's tax revenue
 c = (1-tau)*w*h + r*k + v - k + (1-delta)*k; % Consumption in steady state
 
-% alpha and beta
+% alpha and beta from expressions derived:
+% Note that alpha depend only on "allowed" values + gamma that can be
+% viewed as a global variable.
 alpha2b = alpha(theta, h, kdivy, tau, c, cbar, gamma); % 13.3412
 beta = 1 / (theta*(1/kdivy) + (1 - delta)); % 0.9231
 
 % c)
-tauvec = (0.01:0.01:0.99)'; % 1% to 99% in steps of 1%
-xi = 0; % this is assumed in the exercise. I need it to define cbar inside the function.
+tauvec = (0.01:0.01:0.99)'; % a vector from 1% to 99% in steps of 1%
+xi = 0; % I introduce this early as I need it to define cbar inside the function. 
 revenue2c = govrev(tauvec, w, xi, gamma, theta,r, alpha2b, kdivy, delta); 
 
 %% 3 Subsistence consumption
 % a
-xi_vec = 0.1:0.01:0.9; % all xi values we care about
+xi_vec = 0.1:0.01:0.9; % all xi values we care about in steps of 1%
 alpha3a = alpha_xi(theta, h, kdivy, tau, xi_vec); % Note that function accepts the vector value
 plot(xi_vec, alpha3a)
 xlabel('xi')
@@ -48,16 +50,18 @@ cbar = 0.2;
 tau = 0.3;
 h = 1/3;
 params4 = [gamma, theta, delta, cbar, beta];
- % Need to create an anonymous func so that I can provide it to fsolve.
+ % Need to create an anonymous func so that I can provide it to fsolve
+ % evaluated at the parameter values.
 fun = @(x) alpharoot(x, h, params4, tau);
 % part a
 alpha4a = fsolve(fun, alpha2b); % Gives me a calibrated alpha value that goes into the next step
 
-fun2 = @(x) alpharoot(alpha4a, x, params4, tauvec);
-hguess = ones(length(tauvec),1);
+tauvec = (0.01:0.01:0.99)'; % a vector from 1% to 99% in steps of 1%
+fun2 = @(x) alpharoot(alpha4a, x, params4, tauvec); % new function to solve for h, given alpha
+hguess = ones(length(tauvec),1); % initial point for fsolve
 % Part b, solve for h given alpha:
-h4a = fsolve(fun2,hguess);
-% part c, calculate tax revenue using a function. 
+h4a = fsolve(fun2,hguess); % Returns a vector of h for elements in tauvec
+% part c, calculate tax revenue using a new function. 
 revenue4c = govrevroot(theta, h4a, r, tauvec);
 
 %% 5 comparative statics
@@ -71,7 +75,7 @@ title( {'Laffer curves';'These plots display steady state revenue for a given ta
 xlabel('Tax rate (percent of income)')
 ylabel('Government revenue')
 hold off
-% Max revenues:
+% Max revenues: (I briefly comment on these in the pdf)
 [argvalue, argmax] = max(revenue2c); % Revenue maximising tax rate is 75%
 [argvalue, argmax] = max(revenue3b); % Revenue maximising tax rate is 75%
 [argvalue, argmax] = max(revenue4c); % Revenue maximising tax rate is 80%
