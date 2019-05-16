@@ -9,8 +9,7 @@ delta = 0.05;
 
 r = theta * 1/kdivy;
 k = (theta * (h^(1-theta)/r))^(1/(1-theta));
-%c = k*(kdivy^(theta - 1)-delta); % old relationship I think is wrong
-c = k*(1/kdivy -delta);
+c = k*(1/kdivy -delta); % from consuemr's budget constraints and the government's budget condition. Will be constant!
 cbar = c*xi;
 
 alphaxi = alpha(theta, h, kdivy, tau, c,  cbar, gamma);

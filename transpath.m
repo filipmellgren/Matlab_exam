@@ -45,12 +45,11 @@ c = (1-taubar)*w*h + r*k + v - k + (1-delta)*k; % true in steady state
 S = 100;
 params = [theta, gamma,taubar, delta, S, alpha6, beta];
 transfun = @(x) gfunc(kold, x, params); % Provide a vector of h, evaluated at the parameters
-guess = ones(S,1) * 1/3; % A good guess is the previous value
+guess = ones(S+1,1) * 1/3; % A good guess is the previous value. Note that we need to add one for period T = index 1.
 
 hvec = fsolve(transfun, guess); % Obtain the h that solves the transition
 
-[zero, k, r, w, c, y] = gfunc(kold, hvec, params); % Everything follows as we plug h into the system
-v = taubar*w.*hvec;
+[zero, k, r, w, c, y, v] = gfunc(kold, hvec, params); % Everything follows as we plug h into the system
 
 subplot(3,2,1);
 plot(y)
@@ -79,6 +78,6 @@ title('Capital')
 % Plot the six above jointly. Then plot the following:
 
 plot(v)
-title( {'Tax revenue';'Between the steady states, taxes increase, this plot shows evolution after T'})
+title( {'Tax revenue';'Between the steady states, taxes increase, this plot shows evolution from T'})
 xlabel('Periods after T')
 ylabel('Revenue per wage unit earned in a time period')
