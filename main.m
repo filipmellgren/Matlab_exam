@@ -13,25 +13,21 @@ kdivy = 3; % k/y
 tau = 0.3;
 cbar = 0;
 
-% Values I solved for
-%TODO functions files for these guys
-r = theta * 1/kdivy;
-w = (1-theta) * kdivy^(theta/(1-theta));
-
-k = h / ((1/kdivy)^(1/(1-theta)));
-
-v = tau*w*h;
-c = (1-tau)*w*h + r*k + v - k + (1-delta)*k; % true in steady state
+% From the firm's first order condition, with algebra presented in the pdf:
+r = theta * 1/kdivy; %MPK
+w = (1-theta) * kdivy^(theta/(1-theta)); %MPL
+k = h / ((1/kdivy)^(1/(1-theta))); % Eq. (12) in pdf
+v = tau*w*h; % the government's tax revenue
+c = (1-tau)*w*h + r*k + v - k + (1-delta)*k; % Consumption in steady state
 
 % alpha and beta
-alpha2b = alpha(theta, h, kdivy, tau, c, cbar, gamma);
-%alpha = ((1-tau)*w) / (h^(1/gamma)*(c - cbar)); % 13.34
+alpha2b = alpha(theta, h, kdivy, tau, c, cbar, gamma); % 13.3412
 beta = 1 / (theta*(1/kdivy) + (1 - delta)); % 0.9231
 
 % c)
 tauvec = (0.01:0.01:0.99)'; % 1% to 99% in steps of 1%
 xi = 0; % this is assumed in the exercise. I need it to define cbar inside the function.
-revenue2c = govrev(tauvec, w, c, xi, gamma, theta,r, alpha2b, kdivy, delta); 
+revenue2c = govrev(tauvec, w, xi, gamma, theta,r, alpha2b, kdivy, delta); 
 
 %% 3 Subsistence consumption
 % a
@@ -45,10 +41,12 @@ title('Disutility of labour explodes with higher subsistence consumption')
 % b)
 xi = 1/3; % New assumption
 alpha3b = alpha_xi(theta, h, kdivy, tau, xi);
-revenue3b = govrev(tauvec, w, c, xi, gamma, theta,r, alpha3b,  kdivy, delta);
+revenue3b = govrev(tauvec, w, xi, gamma, theta,r, alpha3b,  kdivy, delta);
 
 %% 4
 cbar = 0.2;
+tau = 0.3;
+h = 1/3;
 params4 = [gamma, theta, delta, cbar, beta];
  % Need to create an anonymous func so that I can provide it to fsolve.
 fun = @(x) alpharoot(x, h, params4, tau);
@@ -74,6 +72,3 @@ xlabel('Tax rate (percent of income)')
 ylabel('Government revenue')
 hold off
 
-% Revenue for 2c and 3b have visibly similar revenue maximising tax rates.
-% Check if they are the same:
-max(revenue2c) - max(revenue3b); % Nope, difference of -0.0402.

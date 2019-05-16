@@ -15,7 +15,10 @@ frac2 = 1/(ydivk^(1/(theta -1)) * (ydivk - delta));
 
 h = (frac1 .* frac2).^(1/(1+1/gamma));
 
-%h = ( (1/kdivy)^(1/(1-theta)) * (1-tau)*w / (( (1-xi)*
-%alphaval*(1/kdivy-delta))) ).^(gamma/(1+gamma)); % OLD!
+%{
+For the record, I came up with another expression I want sure about, both
+yield the same result:
+h = ( (1/kdivy)^(1/(1-theta)) * (1-tau)*w / (( (1-xi)*alphaval*(1/kdivy-delta))) ).^(gamma/(1+gamma));
+%}
 end
 
