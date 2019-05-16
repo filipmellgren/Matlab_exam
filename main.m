@@ -1,4 +1,5 @@
 % 16 May 2019
+clear
 %% 2 Calibration and steady state
 % b) 
 % Values provided to us in the exercise:
@@ -62,12 +63,17 @@ h4a = fsolve(fun2,hguess);
 revenue4c = govrevroot(theta, h4a, r, tauvec);
 
 %% 5 comparative statics
-plot([revenue2c, revenue3b, revenue4c])
+figure
+plot(revenue2c)
+hold on
+plot(revenue3b, '.')
+plot(revenue4c)
 legend('revenue2c','revenue3b', 'revenue4c')
 title( {'Laffer curves';'These plots display steady state revenue for a given tax rate'})
 xlabel('Tax rate (percent of income)')
 ylabel('Government revenue')
+hold off
 
 % Revenue for 2c and 3b have visibly similar revenue maximising tax rates.
 % Check if they are the same:
-max(revenue2c) - max(revenue3b); % Nope, difference of -0.042.
+max(revenue2c) - max(revenue3b); % Nope, difference of -0.0402.
